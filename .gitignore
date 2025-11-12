@@ -1,0 +1,16 @@
+# Ignore virtual environments
+venv/
+.venv/
+ENV/
+env/
+
+# Ignore data folder
+data/
+
+# Ignore one specific file
+results/comparison_data.pkl
+
+# (Optional but recommended)
+__pycache__/
+*.pyc
+.DS_Store
