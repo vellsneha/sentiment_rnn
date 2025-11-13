@@ -7,6 +7,7 @@ import os
 import time
 import numpy as np
 import torch
+import platform
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
@@ -187,6 +188,12 @@ def train_model(model, train_loader, test_loader, optimizer, criterion,
         # Save best model
         if test_loss < best_test_loss:
             best_test_loss = test_loss
+            save_dir = os.path.join(os.getcwd(), "saved_models")
+            os.makedirs(save_dir, exist_ok=True)
+            model_path = os.path.join(save_dir, f"best_model_{model.__class__.__name__}.pt")
+            torch.save(model.state_dict(), model_path)
+            if verbose:
+                print(f"✅ Best model saved to {model_path}")
     
     return history
 
@@ -292,7 +299,20 @@ def run_experiment(model_type, activation, optimizer_name, seq_length,
 if __name__ == "__main__":
     # Check if CUDA is available
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # --- Hardware Information ---
+    print("========================================")
+    print("🔧 Hardware Information:")
     print(f"Using device: {device}")
+    if torch.cuda.is_available():
+        print(f"GPU: {torch.cuda.get_device_name(0)}")
+    else:
+        cpu_info = platform.processor() or platform.uname().processor
+        ram_info = round(psutil.virtual_memory().total / (1024 ** 3), 2)
+        print(f"CPU: {cpu_info}")
+        print(f"RAM: {ram_info} GB")
+    print("========================================")
+
+    
     
     # Example: Run a single experiment
     results = run_experiment(

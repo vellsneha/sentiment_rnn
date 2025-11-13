@@ -3,11 +3,6 @@ Data Preprocessing Module
 Handles loading, cleaning, and preparing the IMDb dataset for training.
 """
 
-# Fix SSL certificate verification issue on macOS
-import os
-import certifi
-os.environ['SSL_CERT_FILE'] = certifi.where()
-
 import re
 import pickle
 import numpy as np
